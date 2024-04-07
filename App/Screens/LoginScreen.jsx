@@ -7,6 +7,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch } from 'react-redux';
 import { login, userDetails } from '../redux/authSlice';
 import { useNavigation } from '@react-navigation/native';
+require('dotenv').config();
+
 
 
 const backgroundImage = require('../../assets/login_image.jpg');
@@ -40,7 +42,7 @@ const LoginScreen = () => {
     const handleLogin = async () => {
     if (validateForm()) {
         try {
-            const response = await axios.post(`http://192.168.1.4:3001/api//login`, {
+            const response = await axios.post(`${process.env.SERVER_API}/api//login`, {
                 email,
                 password
             });

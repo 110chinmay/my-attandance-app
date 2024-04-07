@@ -6,6 +6,8 @@ import CameraComponent from '../components/CameraComponent';
 import axios from 'axios';
 import moment from 'moment';
 import { useSelector } from 'react-redux';
+require('dotenv').config();
+
 
 const RecordAttendance = () => {
   const empDetails = useSelector((state)=>state.auth.userDetails);
@@ -45,7 +47,7 @@ const RecordAttendance = () => {
     data.append('LatLongDetails', JSON.stringify(getLatLongDetails));
     data.append('TimeDate',moment().format("DD MM YYYY hh:mm:ss"));
     data.append('emp_id',empDetails.emp_id);
-      const response = await axios.post(`http://192.168.1.3:3001/api//add-employee-attendance`, data, {
+      const response = await axios.post(`${process.env.SERVER_API}/api//add-employee-attendance`, data, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
