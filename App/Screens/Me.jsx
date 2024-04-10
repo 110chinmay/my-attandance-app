@@ -1,154 +1,132 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, TextInput, Button, Alert, Image, TouchableOpacity, Modal } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import * as ImagePicker from 'expo-image-picker';
+import { SafeAreaView, StyleSheet, View, Text, ImageBackground, TextInput, TouchableOpacity, Image } from 'react-native';
+import Header from '../components/Header';
+const backgroundImage = require('../../assets/login_image.jpg');
 
 const Me = () => {
-  const [name, setName] = useState('');
-  const [address, setAddress] = useState('');
-  const [technologies, setTechnologies] = useState('');
-  const [position, setPosition] = useState('');
-  const [userImage, setUserImage] = useState(null);
-  const [modalVisible, setModalVisible] = useState(false);
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [position, setPosition] = useState('');
+    const [imageUri, setImageUri] = useState('');
 
-  const handleChoosePhoto = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== 'granted') {
-      Alert.alert('Permission required', 'Please grant permission to access the photo library');
-      return;
-    }
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-    if (!result.cancelled) {
-      setUserImage(result.uri);
-    }
-  };
+    const handleSave = () => {
+        
+    };
 
-  const handleUpload = () => {
-    if (!name || !address || !technologies || !position) {
-      Alert.alert('Validation Error', 'Please fill in all fields');
-      return;
+    const handleEditImage= () =>{
+       
     }
-    // Perform upload logic here
-    Alert.alert('Success', 'Details uploaded successfully');
-  };
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.card}>
-        <Text style={styles.title}>Upload Details</Text>
-        <Text style={styles.subtitle}>Please fill in your details</Text>
-        <TouchableOpacity onPress={() => setModalVisible(true)}>
-          <Image source={require('../../assets/no_image.png')} style={styles.profileImage} />
-        </TouchableOpacity>
-        <TextInput
-          style={styles.input}
-          placeholder="Name"
-          value={name}
-          onChangeText={(text) => setName(text)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Address"
-          value={address}
-          onChangeText={(text) => setAddress(text)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Technologies"
-          value={technologies}
-          onChangeText={(text) => setTechnologies(text)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Position"
-          value={position}
-          onChangeText={(text) => setPosition(text)}
-        />
-        {userImage && <Image source={{ uri: userImage }} style={styles.image} />}
-        <Button title="Upload" onPress={handleUpload} color="#81C784" />
-      </View>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modal}>
-          <Button title="Choose Photo" onPress={handleChoosePhoto} />
-          <Button title="Take Photo" onPress={() => {}} />
-          <Button title="Cancel" onPress={() => setModalVisible(false)} />
-        </View>
-      </Modal>
-    </SafeAreaView>
-  );
+    return (
+        <SafeAreaView style={styles.container}>
+            <ImageBackground
+                source={backgroundImage}
+                resizeMode="cover"
+                style={styles.backgroundImage}
+            >
+                <View style={styles.overlay}>
+                    <View style={styles.header}>
+                        <Header />
+                    </View>
+                    <View style={styles.formContainer}>
+                        <Text style={styles.formTitle}>Profile</Text>
+                        <TouchableOpacity onPress={handleEditImage}>
+                            <Image source={{ uri: 'https://via.placeholder.com/150' }} style={styles.image} />
+                        </TouchableOpacity>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Name"
+                            value={name}
+                            onChangeText={setName}
+                        />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Email"
+                            value={email}
+                            onChangeText={setEmail}
+                        />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Phone Number"
+                            value={phoneNumber}
+                            onChangeText={setPhoneNumber}
+                        />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Position"
+                            value={position}
+                            onChangeText={setPosition}
+                        />
+                        <TouchableOpacity style={styles.button} onPress={handleSave}>
+                            <Text style={styles.buttonText}>Save</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </ImageBackground>
+        </SafeAreaView>
+    );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#F0F4F7',
-  },
-  card: {
-    width: '90%',
-    padding: 16,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 8,
-    color: '#333333',
-  },
-  subtitle: {
-    fontSize: 16,
-    marginBottom: 16,
-    color: '#666666',
-  },
-  input: {
-    marginBottom: 16,
-    padding: 8,
-    borderWidth: 1,
-    borderColor: '#CCCCCC',
-    borderRadius: 4,
-    backgroundColor: '#FAFAFA',
-    width: '90%',
-  },
-  image: {
-    width: '100%',
-    height: 200,
-    resizeMode: 'cover',
-    marginTop: 16,
-    marginBottom: 16,
-    borderRadius: 8,
-  },
-  profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginBottom: 16,
-  },
-  modal: {
-    backgroundColor: '#FFFFFF',
-    padding: 20,
-    borderRadius: 8,
-    alignSelf: 'center',
-    position: 'absolute',
-    bottom: 50,
-  },
+    container: {
+        backgroundColor: '#f0f0f0',
+        flex: 1,
+    },
+    header: {
+        padding: 16,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+    },
+    overlay: {
+        backgroundColor: 'rgba(255,255,255,0.6)',
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+    },
+    backgroundImage: {
+        width: '100%',
+        height: '100%',
+    },
+    formContainer: {
+        padding: 16,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor:"#ffffff",
+        margin:20
+    },
+    input: {
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 8,
+        padding: 8,
+        marginBottom: 16,
+        width: '100%',
+    },
+    button: {
+        backgroundColor: '#007AFF',
+        padding: 12,
+        borderRadius: 8,
+        alignItems: 'center',
+        width: '100%',
+    },
+    buttonText: {
+        color: '#fff',
+        fontWeight: 'bold',
+    },
+    image: {
+        width: 100,
+        height: 100,
+        borderRadius: 50,
+        marginBottom: 16,
+    },
+    formTitle: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 20,
+    },
 });
 
 export default Me;

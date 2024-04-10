@@ -8,7 +8,7 @@ export default function GoogleMap({handleMapDetails}) {
   const { latitude, longitude } = useSelector((state) => state.location);
   const [loading, setLoading] = useState(true);
 
-
+//Fetching data from MAP and location
   const fetchAddress = async (lat, lng) => {
     try {
       const AddressDetails = await Location.reverseGeocodeAsync({ latitude: lat, longitude: lng });

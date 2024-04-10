@@ -15,17 +15,18 @@
       [
         "react-native-vision-camera",
         {
-          "cameraPermissionText": "$(PRODUCT_NAME) needs access to your Camera.",
+          "cameraPermissionText": "$(EXPO_PUBLIC_PRODUCT_NAME) needs access to your Camera.",
           "enableMicrophonePermission": true,
-          "microphonePermissionText": "$(PRODUCT_NAME) needs access to your Microphone."
+          "microphonePermissionText": "$(EXPO_PUBLIC_PRODUCT_NAME) needs access to your Microphone."
         }
       ],
-       [
+      [
         "expo-image-picker",
         {
           "photosPermission": "The app accesses your photos to let you share them with your friends."
         }
-      ]
+      ],
+      "expo-build-properties"
     ],
     "assetBundlePatterns": [
       "**/*"
@@ -33,8 +34,8 @@
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "NSCameraUsageDescription": "$(PRODUCT_NAME) needs access to your Camera.",
-        "NSMicrophoneUsageDescription": "$(PRODUCT_NAME) needs access to your Microphone."
+        "NSCameraUsageDescription": "$(EXPO_PUBLIC_PRODUCT_NAME) needs access to your Camera.",
+        "NSMicrophoneUsageDescription": "$(EXPO_PUBLIC_PRODUCT_NAME) needs access to your Microphone."
       }
     },
     "android": {
@@ -45,7 +46,7 @@
       "package": "com.chinmayah.myattandanceapp",
       "config": {
         "googleMaps": {
-          "apiKey": "AIzaSyBHX7rWJD5YDaotPHD0dfOpijIftWaCcWM"
+          "apiKey": "${EXPO_PUBLIC_GOOGLE_KEY}"
         }
       },
       "permissions": [

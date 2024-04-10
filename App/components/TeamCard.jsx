@@ -4,7 +4,7 @@ import { View, Text, Image, StyleSheet } from 'react-native';
 const TeamCard = ({ member }) => {
   return (
     <View style={styles.card}>
-      <Image source={member.image} style={styles.image} />
+      <Image source={{ uri: member.imageUrl }} style={styles.image} />
       <View style={styles.details}>
         <Text style={styles.name}>{member.name}</Text>
         <Text style={styles.position}>{member.position}</Text>
