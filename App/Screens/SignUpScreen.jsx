@@ -6,7 +6,7 @@ import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 
 const SignUpScreen = () => {
-
+    const apiUrl = process.env.SERVER_API;
     const navigation = useNavigation();
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -55,7 +55,7 @@ const SignUpScreen = () => {
 
     const handleSubmit = async () => {
         if (validateForm()) {
-            axios.post(`http://192.168.1.4:3001/api/employee-details`, {
+            axios.post(`${apiUrl}/api/employee-details`, {
                 firstname: firstName,
                 lastname: lastName,
                 phone_number: phoneNumber,

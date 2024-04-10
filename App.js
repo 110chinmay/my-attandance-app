@@ -9,12 +9,13 @@ import {  LoginScreen, RecordAttendance, SignUpScreen } from "./App/Screens";
 import TabNavigation from './App/Navigation/TabNavigation';
 import { useSelector } from 'react-redux';
 import { initializeToken } from './App/redux/authSlice';
+import BirthdayScreen from './App/Screens/BirthdayScreen';
+import ApplyLeaveScreen from './App/Screens/ApplyLeaveScreen';
 
 export const URL = "localhost:3001/api";
 
 const Stack = createStackNavigator();
 const AuthNavigation = () => {
-  console.log("called AuthNavigation");
     return (
         <>
          <Stack.Navigator initialRouteName='LoginScreen'>
@@ -26,13 +27,13 @@ const AuthNavigation = () => {
 };
 
 const MyStackNavigation = () => {
-
-   console.log("called MyStackNavigation");
     return (
         <>
          <Stack.Navigator initialRouteName='Home'>
             <Stack.Screen name="Home" component={TabNavigation} options={{ headerShown: false }} />
             <Stack.Screen name="RecordAttendance" component={RecordAttendance} options={{ headerShown: false }} />
+            <Stack.Screen name="BirthdayScreen" component={BirthdayScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="ApplyLeaveScreen" component={ApplyLeaveScreen} options={{ headerShown: false }} />
         </Stack.Navigator>
         </>
         
@@ -49,7 +50,6 @@ useEffect(()=>{
 
 
     const userToken = useSelector((state)=>state.auth.token);
-    console.log("userToken",userToken);
     return(
 <SafeAreaProvider style={styles.container}>
         <NavigationContainer>

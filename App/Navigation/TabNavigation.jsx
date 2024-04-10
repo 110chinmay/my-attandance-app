@@ -15,15 +15,15 @@ const TabNavigation = () => {
                 }
             }} name="HomeTab" component={Home} />
             <Tab.Screen options={{
-                tabBarLabel: "My Team", tabBarIcon: ({ color, size }) => {
+                tabBarLabel: "Team", tabBarIcon: ({ color, size }) => {
                     return <Ionicons name="people" size={size} color={color} />
                 }
-            }} name="My Team" component={MyTeam} />
+            }} name="Team" component={MyTeam} />
             <Tab.Screen options={{
-                tabBarLabel: "Me", tabBarIcon: ({ color, size }) => {
+                tabBarLabel: "Profile", tabBarIcon: ({ color, size }) => {
                     return <Ionicons name="person" size={size} color={color} />
                 }
-            }} name="Me" component={Me} />
+            }} name="Profile" component={Me} />
         </Tab.Navigator>
     )
 }

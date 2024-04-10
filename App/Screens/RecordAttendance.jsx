@@ -1,20 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import { Image, Text, View, TouchableOpacity, Dimensions, StyleSheet, SafeAreaView, ImageBackground } from 'react-native';
+import { Image, Text, View, TouchableOpacity, Dimensions, StyleSheet, SafeAreaView, ImageBackground, ActivityIndicator } from 'react-native';
 import GoogleMap from '../components/GoogleMap';
 import CurrentLocation from '../components/CurrentLocation';
 import CameraComponent from '../components/CameraComponent';
 import axios from 'axios';
 import moment from 'moment';
 import { useSelector } from 'react-redux';
-require('dotenv').config();
+import * as Burnt from "burnt";
+import { useNavigation } from '@react-navigation/native';
+import Header from '../components/Header';
 
+const backgroundImage = require("../../assets/login_image.jpg");
 
 const RecordAttendance = () => {
+  const apiUrl = process.env.EXPO_PUBLIC_SERVER_API;
   const empDetails = useSelector((state)=>state.auth.userDetails);
   const [isCameraClicked, setCameraClicked] = useState(false);
   const [photoUri, setPhotoUri] = useState(null);
   const [completeAddress, setCompleteAddress] = useState(null);
   const [getLatLongDetails, setGetLanLongDetails] = useState({});
+  const [loader, setLoader] = useState(false);
+  const navigation = useNavigation();
 
   const handlePhotoCaptured = (uri) => {
     setPhotoUri(uri.uri);
@@ -28,6 +34,7 @@ const RecordAttendance = () => {
 
   const onDataSubmit = async () => {
     try {
+      setLoader(true);
       if (!photoUri) {
       alert("please click photo");
       return;
@@ -47,13 +54,27 @@ const RecordAttendance = () => {
     data.append('LatLongDetails', JSON.stringify(getLatLongDetails));
     data.append('TimeDate',moment().format("DD MM YYYY hh:mm:ss"));
     data.append('emp_id',empDetails.emp_id);
-      const response = await axios.post(`${process.env.SERVER_API}/api//add-employee-attendance`, data, {
+      const response = await axios.post(`${apiUrl}/api//add-employee-attendance`, data, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
+      setLoader(false);
+      if(response.data){
+          Burnt.toast({
+                title: "Attendance submitted",
+                message: "Attendance submitted",
+              });
+       navigation.navigate('Home')     
+      }
+     
       return response.data;
     } catch (error) {
+      setLoader(false);
+      Burnt.toast({
+          title: "Attendance failed",
+          message: `${error}`,
+        });
       console.error('Upload failed', error);
       throw error;
     }
@@ -61,13 +82,22 @@ const RecordAttendance = () => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
+      <ImageBackground
+          source={backgroundImage}
+          resizeMode="cover"
+          style={styles.backgroundImage}
+        >
       {isCameraClicked == false ?
-        <>
-          <View style={styles.titleContainer}>
-            <Text style={styles.titleText}>Login for Attendance</Text>
-          </View>
+        <View style={styles.overlay}>
+          <View style={styles.header}>
+                        <Header />
+                    </View>
+          
           <View style={styles.container}>
             <View style={styles.card}>
+              <View style={styles.titleContainer}>
+            <Text style={styles.titleText}>Login for Attendance</Text>
+          </View>
               <View style={styles.photoFrame}>
                 {photoUri ? (
                   <ImageBackground source={{ uri: photoUri }} style={styles.photo} />
@@ -86,14 +116,22 @@ const RecordAttendance = () => {
 
 
               <TouchableOpacity style={styles.submitButton} onPress={onDataSubmit}>
-                <Text style={styles.submitButtonText}>Submit</Text>
+                {loader ? (
+                  <ActivityIndicator
+                    size="large"
+                    animating={loader}
+                  />
+            ) :
+                  <Text style={styles.submitButtonText}>Submit</Text> }
               </TouchableOpacity>
             </View>
 
           </View>
-        </>
+        </View>
         : null}
+        
       {isCameraClicked && <CameraComponent onPhotoCaptured={handlePhotoCaptured} />}
+      </ImageBackground>
     </SafeAreaView>
   );
 };
@@ -101,37 +139,45 @@ const RecordAttendance = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#f0f0f0',
   },
+  backgroundImage: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  overlay: {
+        backgroundColor: 'rgba(255,255,255,0.6)',
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+    },
+    header: {
+        padding: 16,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+    },
   titleContainer: {
-    padding: 30,
-    backgroundColor: '#5EAAA8',
-    width: '100%',
+    marginBottom:10,
     alignItems: 'center',
     justifyContent: 'center',
   },
   titleText: {
-    color: '#FFFFFF',
+    color: '#000000',
     fontSize: 24,
     fontWeight: 'bold',
   },
   container: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
   card: {
     width: Dimensions.get('screen').width * 0.95,
     borderRadius: 20,
-    backgroundColor: '#e4f4e3',
+    backgroundColor:"#ffffff",
     padding: 20,
-    marginTop:20,
     marginBottom: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-    elevation: 6,
     alignItems: "center",
   },
   photoFrame: {

@@ -1,62 +1,80 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, FlatList } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React from 'react';
+import { SafeAreaView, StyleSheet, View, Text, ImageBackground, FlatList } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import Header from '../components/Header';
 import TeamCard from '../components/TeamCard';
+const backgroundImage = require('../../assets/login_image.jpg');
 
 const MyTeam = () => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [members, setMembers] = useState([
-    { id: '1', name: 'John Doe', position: 'Software Engineer', phoneNumber: '123-456-7890', image: require('../../assets/no_image.png') },
-    { id: '2', name: 'Jane Doe', position: 'Product Manager', phoneNumber: '987-654-3210', image: require('../../assets/no_image.png') },
-    { id: '3', name: 'Alice Smith', position: 'Designer', phoneNumber: '456-789-0123', image: require('../../assets/no_image.png') },
-    // Add more dummy members here
-  ]);
+    const navigation = useNavigation();
+const teamMembers = [
+    { id: 1, name: 'John Doe', position: 'Developer', phoneNumber: '123-456-7890', imageUrl: 'https://i.pravatar.cc/150?u=1' },
+    { id: 2, name: 'Jane Smith', position: 'Designer', phoneNumber: '987-654-3210', imageUrl: 'https://i.pravatar.cc/150?u=2' },
+    { id: 3, name: 'Alice Johnson', position: 'Manager', phoneNumber: '555-555-5555', imageUrl: 'https://i.pravatar.cc/150?u=3' },
+    { id: 4, name: 'Bob Brown', position: 'Engineer', phoneNumber: '444-444-4444', imageUrl: 'https://i.pravatar.cc/150?u=4' },
+    { id: 5, name: 'Eve Williams', position: 'Analyst', phoneNumber: '333-333-3333', imageUrl: 'https://i.pravatar.cc/150?u=5' },
+];
 
-  const renderMemberCard = ({ item }) => (
-    <TeamCard member={item} />
-  );
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>My Team</Text>
-      <TextInput
-        style={styles.searchInput}
-        placeholder="Search members..."
-        value={searchQuery}
-        onChangeText={(text) => setSearchQuery(text)}
-      />
-      <FlatList
-        data={members.filter(member =>
-          member.name.toLowerCase().includes(searchQuery.toLowerCase())
-        )}
-        keyExtractor={(item) => item.id}
-        renderItem={renderMemberCard}
-      />
-    </SafeAreaView>
-  );
+
+    const renderTeamMember = ({ item }) => (
+        <TeamCard member={item} />
+    );
+
+    return (
+        <SafeAreaView style={styles.container}>
+            <ImageBackground
+                source={backgroundImage}
+                resizeMode="cover"
+                style={styles.backgroundImage}
+            >
+                <View style={styles.overlay}>
+                    <View style={styles.header}>
+                        <Header />
+                    </View>
+                </View>
+                <View style={styles.teamDetails}>
+                    <FlatList
+                        data={teamMembers}
+                        renderItem={renderTeamMember}
+                        keyExtractor={item => item.id.toString()}
+                        contentContainerStyle={styles.teamList}
+                    />
+                </View>
+            </ImageBackground>
+        </SafeAreaView>
+    );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-    backgroundColor: '#F0F4F7',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 16,
-    color: '#333333',
-  },
-  searchInput: {
-    height: 40,
-    borderWidth: 1,
-    borderColor: '#CCCCCC',
-    borderRadius: 4,
-    padding: 8,
-    marginBottom: 16,
-    backgroundColor: '#FFFFFF',
-  },
+    container: {
+        backgroundColor: '#f0f0f0',
+        flex: 1,
+    },
+    header: {
+        padding: 16,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+    },
+    overlay: {
+        backgroundColor: 'rgba(255,255,255,0.6)',
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+    },
+    backgroundImage: {
+        width: '100%',
+        height: '100%',
+    },
+    teamDetails: {
+        flex: 1,
+        paddingTop: 100,
+    },
+    teamList: {
+        padding: 16,
+    },
 });
 
 export default MyTeam;

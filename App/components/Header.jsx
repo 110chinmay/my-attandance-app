@@ -10,7 +10,6 @@ const Header = () => {
         const navigation = useNavigation();
     const handleLogout = async () => {
     try {
-        console.log("Called");
         await AsyncStorage.removeItem('userToken');
         dispatch(logout());
 
