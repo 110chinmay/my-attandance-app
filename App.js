@@ -39,7 +39,6 @@ const MyStackNavigation = () => {
         
     );
 };
-
 const RootNavigation = () => {
 
   const dispatch = useDispatch();
@@ -60,7 +59,7 @@ useEffect(()=>{
     )
           
 }
-
+//Main navigation
 export default function App() {
   return (
     <Provider store={store}>
