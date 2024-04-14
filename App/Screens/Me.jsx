@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SafeAreaView, StyleSheet, View, Text, ImageBackground, TextInput, TouchableOpacity, Image } from 'react-native';
 import Header from '../components/Header';
+import { useSelector } from 'react-redux';
 const backgroundImage = require('../../assets/login_image.jpg');
 
 const Me = () => {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState('');
-    const [position, setPosition] = useState('');
+    const empDetails = useSelector((state)=>state.auth.userDetails);
+    const [name, setName] = useState(empDetails.firstname);
+    const [email, setEmail] = useState(empDetails.email);
+    const [phoneNumber, setPhoneNumber] = useState('1234567');
+    const [organization, setOrganization] = useState(empDetails.organization);
     const [imageUri, setImageUri] = useState('');
 
     const handleSave = () => {
@@ -54,9 +56,9 @@ const Me = () => {
                         />
                         <TextInput
                             style={styles.input}
-                            placeholder="Position"
-                            value={position}
-                            onChangeText={setPosition}
+                            placeholder="organization"
+                            value={organization}
+                            onChangeText={setOrganization}
                         />
                         <TouchableOpacity style={styles.button} onPress={handleSave}>
                             <Text style={styles.buttonText}>Save</Text>
@@ -80,7 +82,7 @@ const styles = StyleSheet.create({
     },
     overlay: {
         backgroundColor: 'rgba(255,255,255,0.6)',
-        position: 'absolute',
+        organization: 'absolute',
         top: 0,
         bottom: 0,
         left: 0,
